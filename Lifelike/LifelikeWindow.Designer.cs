@@ -115,6 +115,7 @@ namespace Lifelike
             // 
             // btnRerun
             // 
+            this.btnRerun.Enabled = false;
             this.btnRerun.Location = new System.Drawing.Point(594, 652);
             this.btnRerun.Margin = new System.Windows.Forms.Padding(2);
             this.btnRerun.Name = "btnRerun";

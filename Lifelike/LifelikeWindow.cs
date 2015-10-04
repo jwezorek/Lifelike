@@ -30,6 +30,19 @@ namespace Lifelike
             ctrlCellularAutomata.CellularAutomataSettings = _genAlg.CaSettings;
             ctrlCellularAutomataSettings.Settings = _genAlg.CaSettings;
             ctrlGeneticAlgorithmSettings.Settings = _genAlg.GaSettings;
+
+            ctrlCellularAutomata.CaRulesChanged += ctrlCellularAutomata_CaRulesChanged;
+            ctrlCellularAutomataSettings.SettingsChanged += ctrlCellularAutomataSettings_SettingsChanged;
+        }
+
+        void ctrlCellularAutomataSettings_SettingsChanged()
+        {
+            ctrlCellularAutomata.Clear();
+        }
+
+        private void ctrlCellularAutomata_CaRulesChanged()
+        {
+            btnRerun.Enabled = (ctrlCellularAutomata.Rules != null);
         }
 
         private void ctrlCellularAutomata_Click(object sender, EventArgs e)

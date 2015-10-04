@@ -37,6 +37,8 @@ namespace Lifelike
             Color.White
         };
 
+        public event Action CaRulesChanged;
+
         public CellularAutomataControl()
         {
             InitializeComponent();
@@ -49,6 +51,12 @@ namespace Lifelike
             _timer = new Timer();
             _timer.Interval = 1;
             _timer.Tick += DoCellularAutomata;
+        }
+
+        protected void OnChanged()
+        {
+            if (CaRulesChanged != null)
+                CaRulesChanged();
         }
 
         public List<Color> Colors
@@ -173,19 +181,31 @@ namespace Lifelike
             {
                 return _rules;
             }
+
+            private set
+            {
+                _rules = value;
+                OnChanged();
+            }
         }
 
         public void Run(Cells cells, CellularAutomataRules rules)
         {
             _cells = cells;
             CalculateOffset();
-            _rules = (rules != null) ? rules: _rules;
+            Rules = (rules != null) ? rules : _rules;
             _timer.Start();
         }
 
         public void Stop()
         {
             _timer.Stop();
+        }
+
+        internal void Clear()
+        {
+            Stop();
+            Rules = null;
         }
     }
 }

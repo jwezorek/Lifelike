@@ -14,6 +14,8 @@ namespace Lifelike
     {
         private CellularAutomataSettings _settings = null;
 
+        public event Action SettingsChanged;
+
         public CellularAutomataSettingsControl()
         {
             InitializeComponent();
@@ -29,19 +31,28 @@ namespace Lifelike
             numboxStates.ValueChanged += numboxStates_ValueChanged;
         }
 
+        protected void OnChanged()
+        {
+            if (SettingsChanged != null)
+                SettingsChanged();
+        }
+
         private void numboxStates_ValueChanged(object sender, EventArgs e)
         {
             ((LifelikeWindow)Parent).SetNumStates((int) numboxStates.Value);
+            OnChanged();
         }
 
         private void comboCellStructure_SelectedIndexChanged(object sender, EventArgs e)
         {
             _settings.CellStructure = CellStructure.Get(comboCellStructure.SelectedIndex);
+            OnChanged();
         }
 
         private void comboMappingFunction_SelectedIndexChanged(object sender, EventArgs e)
         {
             _settings.NeighborhoodFunction = NeighborhoodFunction.Get(comboMappingFunction.SelectedIndex);
+            OnChanged();
         }
 
         public CellularAutomataSettings Settings
@@ -51,11 +62,6 @@ namespace Lifelike
                 _settings = value;
                 UpdateUi();
             }
-        }
-
-        private void _settings_Changed(object sender, EventArgs e)
-        {
-            UpdateUi();
         }
 
         private void UpdateUi()
