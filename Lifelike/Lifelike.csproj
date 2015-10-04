@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A8F8F054-C482-41C3-BE7B-221D3E6400AD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Lifelike</RootNamespace>
+    <AssemblyName>Lifelike</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ColorSlider">
+      <HintPath>3rdPartyLibraries\ColorSlider.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="CellStructure.cs" />
+    <Compile Include="DiscreteDistribution.cs" />
+    <Compile Include="DistributionBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DistributionBox.Designer.cs">
+      <DependentUpon>DistributionBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MutationFunction.cs" />
+    <Compile Include="NeighborhoodFunction.cs" />
+    <Compile Include="RandomFactory.cs" />
+    <Compile Include="RulesSaveData.cs" />
+    <Compile Include="Cells.cs" />
+    <Compile Include="CellularAutomataRules.cs" />
+    <Compile Include="CellularAutomataSettings.cs" />
+    <Compile Include="CustomControls\CellularAutomataControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="CustomControls\CellularAutomataControl.Designer.cs">
+      <DependentUpon>CellularAutomataControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\CellularAutomataSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\CellularAutomataSettingsControl.Designer.cs">
+      <DependentUpon>CellularAutomataSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\GeneticAlgInProgressPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\GeneticAlgInProgressPanel.Designer.cs">
+      <DependentUpon>GeneticAlgInProgressPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="LifelikeWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="LifelikeWindow.Designer.cs">
+      <DependentUpon>LifelikeWindow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CustomControls\GeneticAlgorithmSettingsControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="CustomControls\GeneticAlgorithmSettingsControl.Designer.cs">
+      <DependentUpon>GeneticAlgorithmSettingsControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Generation.cs" />
+    <Compile Include="GeneticAlgorithmState.cs" />
+    <Compile Include="GeneticAlgorithmSettings.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReproductionFunction.cs" />
+    <Compile Include="Util.cs" />
+    <EmbeddedResource Include="CustomControls\CellularAutomataSettingsControl.resx">
+      <DependentUpon>CellularAutomataSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\GeneticAlgInProgressPanel.resx">
+      <DependentUpon>GeneticAlgInProgressPanel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DistributionBox.resx">
+      <DependentUpon>DistributionBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="LifelikeWindow.resx">
+      <DependentUpon>LifelikeWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="CustomControls\GeneticAlgorithmSettingsControl.resx">
+      <DependentUpon>GeneticAlgorithmSettingsControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
