@@ -35,6 +35,7 @@
             this.lblGenerationNumber = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnLoad = new System.Windows.Forms.Button();
+            this.lblDescription = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // lblNextGenItemCount
@@ -49,8 +50,8 @@
             // 
             // btnGoToNextGeneration
             // 
-            this.btnGoToNextGeneration.Location = new System.Drawing.Point(11, 69);
-            this.btnGoToNextGeneration.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnGoToNextGeneration.Location = new System.Drawing.Point(11, 94);
+            this.btnGoToNextGeneration.Margin = new System.Windows.Forms.Padding(2);
             this.btnGoToNextGeneration.Name = "btnGoToNextGeneration";
             this.btnGoToNextGeneration.Size = new System.Drawing.Size(172, 25);
             this.btnGoToNextGeneration.TabIndex = 1;
@@ -61,7 +62,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(10, 127);
+            this.label1.Location = new System.Drawing.Point(10, 152);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(175, 13);
@@ -70,8 +71,8 @@
             // 
             // btnReturnToPrevGeneration
             // 
-            this.btnReturnToPrevGeneration.Location = new System.Drawing.Point(10, 99);
-            this.btnReturnToPrevGeneration.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnReturnToPrevGeneration.Location = new System.Drawing.Point(10, 124);
+            this.btnReturnToPrevGeneration.Margin = new System.Windows.Forms.Padding(2);
             this.btnReturnToPrevGeneration.Name = "btnReturnToPrevGeneration";
             this.btnReturnToPrevGeneration.Size = new System.Drawing.Size(172, 25);
             this.btnReturnToPrevGeneration.TabIndex = 4;
@@ -91,8 +92,8 @@
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(10, 183);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnSave.Location = new System.Drawing.Point(10, 208);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(2);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(172, 25);
             this.btnSave.TabIndex = 6;
@@ -102,7 +103,7 @@
             // 
             // btnLoad
             // 
-            this.btnLoad.Location = new System.Drawing.Point(10, 154);
+            this.btnLoad.Location = new System.Drawing.Point(10, 179);
             this.btnLoad.Margin = new System.Windows.Forms.Padding(2);
             this.btnLoad.Name = "btnLoad";
             this.btnLoad.Size = new System.Drawing.Size(172, 25);
@@ -111,11 +112,22 @@
             this.btnLoad.UseVisualStyleBackColor = true;
             this.btnLoad.Click += new System.EventHandler(this.btnLoad_Click);
             // 
+            // lblDescription
+            // 
+            this.lblDescription.AutoSize = true;
+            this.lblDescription.Location = new System.Drawing.Point(10, 66);
+            this.lblDescription.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.lblDescription.Name = "lblDescription";
+            this.lblDescription.Size = new System.Drawing.Size(35, 13);
+            this.lblDescription.TabIndex = 8;
+            this.lblDescription.Text = "label1";
+            // 
             // GeneticAlgInProgressPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.Controls.Add(this.lblDescription);
             this.Controls.Add(this.btnLoad);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.lblGenerationNumber);
@@ -123,7 +135,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnGoToNextGeneration);
             this.Controls.Add(this.lblNextGenItemCount);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "GeneticAlgInProgressPanel";
             this.Size = new System.Drawing.Size(192, 236);
             this.ResumeLayout(false);
@@ -140,5 +152,6 @@
         private System.Windows.Forms.Label lblGenerationNumber;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Button btnLoad;
+        private System.Windows.Forms.Label lblDescription;
     }
 }

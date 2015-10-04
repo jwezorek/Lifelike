@@ -59,10 +59,12 @@ namespace Lifelike
         {
             ctrlInProgressPanel.SetGenerationItemCount(0);
             ctrlInProgressPanel.SetGenerationNumber(_genAlg.GenerationNumber);
+            ctrlInProgressPanel.SetDescription( _genAlg.CaSettings );
 
             //ctrlGeneticAlgorithmSettings.Visible = false;
             ctrlCellularAutomataSettings.Visible = false;
             ctrlInProgressPanel.Visible = true;
+            btnLoad.Visible = false;
 
             foreach (var btn in _fitnessButtons)
                 btn.Enabled = true;
@@ -78,6 +80,7 @@ namespace Lifelike
             ctrlGeneticAlgorithmSettings.Visible = true;
             ctrlCellularAutomataSettings.Visible = true;
             ctrlInProgressPanel.Visible = false;
+            btnLoad.Visible = true;
 
             btnRun.Text = "Run genetic algorithm";
             ctrlCellularAutomata.Stop();

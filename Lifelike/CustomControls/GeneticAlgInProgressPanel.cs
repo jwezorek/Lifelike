@@ -54,5 +54,15 @@ namespace Lifelike.CustomControls
         {
             MainWindow.LoadRules();
         }
+
+        public void SetDescription(CellularAutomataSettings ca)
+        {
+            lblDescription.Text = string.Format(
+                "{0}; {1}; {2} states",
+                ca.CellStructure.Name,
+                ca.NeighborhoodFunction.Name,
+                ca.NumStates
+            );
+        }
     }
 }
