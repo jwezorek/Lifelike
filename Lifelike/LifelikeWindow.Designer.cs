@@ -138,11 +138,12 @@ namespace Lifelike
             // 
             // ctrlCellularAutomataSettings
             // 
+            this.ctrlCellularAutomataSettings.AutoSize = true;
             this.ctrlCellularAutomataSettings.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ctrlCellularAutomataSettings.Location = new System.Drawing.Point(651, 9);
             this.ctrlCellularAutomataSettings.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ctrlCellularAutomataSettings.Name = "ctrlCellularAutomataSettings";
-            this.ctrlCellularAutomataSettings.Size = new System.Drawing.Size(260, 260);
+            this.ctrlCellularAutomataSettings.Size = new System.Drawing.Size(260, 316);
             this.ctrlCellularAutomataSettings.TabIndex = 6;
             // 
             // ctrlCellularAutomata
@@ -163,7 +164,7 @@ namespace Lifelike
             this.ctrlInProgressPanel.Location = new System.Drawing.Point(651, 11);
             this.ctrlInProgressPanel.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.ctrlInProgressPanel.Name = "ctrlInProgressPanel";
-            this.ctrlInProgressPanel.Size = new System.Drawing.Size(260, 260);
+            this.ctrlInProgressPanel.Size = new System.Drawing.Size(260, 314);
             this.ctrlInProgressPanel.TabIndex = 9;
             this.ctrlInProgressPanel.Visible = false;
             // 
@@ -189,6 +190,7 @@ namespace Lifelike
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.Text = "Lifelike Cellular Automata Breeder";
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
