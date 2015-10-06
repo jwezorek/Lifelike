@@ -1,5 +1,4 @@
-﻿using NGif;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -243,21 +242,18 @@ namespace Lifelike
             for (int i = 0; i < numFramesPreamble; i++)
                 cells = cells.ApplyRules(rules, function);
 
-            AnimatedGifEncoder encoder = new AnimatedGifEncoder();
-            encoder.Start(outputFilePath);
-            encoder.SetDelay(10);
-            encoder.SetRepeat(0);
-
-            Bitmap bmp = new Bitmap(cells.Columns*2, cells.Rows*2);
-            Point offset = new Point(0,0);
-            for (int i = 0; i < numFrames; i++)
+            using (FileStream fs = new FileStream(outputFilePath, FileMode.Create))
+            using (GifEncoder encoder = new GifEncoder(fs, cells.Columns * 2, cells.Rows * 2))
             {
-                CellularAutomataControl.PaintBitmap(bmp, cells, offset, ctrlCellularAutomata.Colors);
-                encoder.AddFrame( Image.FromHbitmap(bmp.GetHbitmap()) ); /*ConvertBitmapToImage(bmp)); */
-                cells = cells.ApplyRules(rules, function);
+                Bitmap bmp = new Bitmap(cells.Columns * 2, cells.Rows * 2);
+                Point offset = new Point(0, 0);
+                for (int i = 0; i < numFrames; i++)
+                {
+                    CellularAutomataControl.PaintBitmap(bmp, cells, offset, ctrlCellularAutomata.Colors);
+                    encoder.AddFrame(Image.FromHbitmap(bmp.GetHbitmap()), 0, 0, new TimeSpan(5));
+                    cells = cells.ApplyRules(rules, function);
+                }
             }
-
-            encoder.Finish();
         }
 
         private void SaveRules(string fileName)
