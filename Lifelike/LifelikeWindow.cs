@@ -1,8 +1,11 @@
-﻿using System;
+﻿using NGif;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -198,19 +201,71 @@ namespace Lifelike
             LoadRules();
         }
 
-        public void SaveCurrentRules()
+        public void DoSaveDialog()
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Lifelike JSON|*.json|Animated GIF|*.gif";
+            saveFileDialog.Title = "Save current cellular automata";
+            saveFileDialog.ShowDialog();
+
+            if (saveFileDialog.FileName != "")
+            {
+                if (Path.GetExtension(saveFileDialog.FileName) == ".json")
+                    SaveRules(saveFileDialog.FileName);
+                else
+                    ExportAsAnimatedGif(saveFileDialog.FileName);
+            }
+        }
+
+        public static Image ConvertBitmapToImage(Bitmap oldbmp)
+        {
+            //I believe this will convert to indexed color..
+            using (var ms = new MemoryStream())
+            {
+                oldbmp.Save(ms, ImageFormat.Gif);
+                ms.Position = 0;
+                return Image.FromStream(ms);
+            }
+        }
+
+        private void ExportAsAnimatedGif(string outputFilePath)
+        {
+            //TODO: popup dialog to get numFramesPreamble and numFrames from user, and
+            // maybe delay setting. Wrap actual generation in a progress dialog
+            // because NGif is pretty slow.
+
+            Cells cells = _genAlg.CaSettings.GetInitialCells(_genAlg.GaSettings.InitialStateDistribution);
+            CellularAutomataRules rules = ctrlCellularAutomata.Rules;
+            NeighborhoodFunction function = _genAlg.CaSettings.NeighborhoodFunction;
+
+            int numFramesPreamble = 100;
+            int numFrames = 200;
+            for (int i = 0; i < numFramesPreamble; i++)
+                cells = cells.ApplyRules(rules, function);
+
+            AnimatedGifEncoder encoder = new AnimatedGifEncoder();
+            encoder.Start(outputFilePath);
+            encoder.SetDelay(10);
+            encoder.SetRepeat(0);
+
+            Bitmap bmp = new Bitmap(cells.Columns*2, cells.Rows*2);
+            Point offset = new Point(0,0);
+            for (int i = 0; i < numFrames; i++)
+            {
+                CellularAutomataControl.PaintBitmap(bmp, cells, offset, ctrlCellularAutomata.Colors);
+                encoder.AddFrame( Image.FromHbitmap(bmp.GetHbitmap()) ); /*ConvertBitmapToImage(bmp)); */
+                cells = cells.ApplyRules(rules, function);
+            }
+
+            encoder.Finish();
+        }
+
+        private void SaveRules(string fileName)
         {
             CellularAutomataRules rules = _genAlg.CurrentRules;
             var settingsCa = _genAlg.CaSettings;
             var saveData = new RulesSaveData(settingsCa, rules.StateTable);
-
-            SaveFileDialog saveFileDialog1 = new SaveFileDialog();
-            saveFileDialog1.Filter = "Lifelike JSON|*.json";
-            saveFileDialog1.Title = "Save current cellular automata";
-            saveFileDialog1.ShowDialog();
-
-            if (saveFileDialog1.FileName != "")
-                saveData.Save(saveFileDialog1.FileName);
+            saveData.Save(fileName);
         }
 
         public void GoToPreviousGeneration()

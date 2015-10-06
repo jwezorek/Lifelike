@@ -20,7 +20,7 @@ namespace Lifelike
         private Timer _timer;
 
         private const int CELL_DIM = 2;
-        private Color[] _colors = new Color[] {
+        private List<Color> _colors = new List<Color> {
             Color.Black,
             Color.Red,
             Color.Orange,
@@ -76,7 +76,7 @@ namespace Lifelike
         private void DoCellularAutomata(object sender, EventArgs e)
         {
             _cells = _cells.ApplyRules(_rules, CellularAutomataSettings.NeighborhoodFunction );
-            UpdateBitmap();
+            PaintBitmap(_bmp, _cells, _ptOffset, _colors);
             Invalidate();
         }
 
@@ -106,26 +106,26 @@ namespace Lifelike
             }
         }
 
-        private void UpdateBitmap()
+        public static void PaintBitmap(Bitmap bmp, Cells cells, Point ptOffset, List<Color> colors)
         {
-            BitmapData data = _bmp.LockBits(new Rectangle(0, 0, _bmp.Width, _bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
+            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
             unsafe
             {
                 byte* ptr = (byte*)data.Scan0;
-                for (int row = 0; row < _cells.Rows; row++)
-                    for (int col = 0; col < _cells.Columns; col++)
+                for (int row = 0; row < cells.Rows; row++)
+                    for (int col = 0; col < cells.Columns; col++)
                     {
-                        var pt = _cells.GetXyCoordinates( col, row, CELL_DIM );
-                        if (pt.X + CELL_DIM < _cells.Columns*CELL_DIM)
-                            PaintCell(ptr, _ptOffset.X + pt.X, _ptOffset.Y + pt.Y, data.Stride, _colors[_cells[col, row]]);
+                        var pt = cells.GetXyCoordinates(col, row, CELL_DIM);
+                        if (pt.X + CELL_DIM < cells.Columns * CELL_DIM)
+                            PaintCell(ptr, ptOffset.X + pt.X, ptOffset.Y + pt.Y, data.Stride, colors[cells[col, row]]);
                         else
                         {
-                            PaintHalfCell(ptr, _ptOffset.X + pt.X, _ptOffset.Y + pt.Y, data.Stride, _colors[_cells[col, row]]);
-                            PaintHalfCell(ptr, _ptOffset.X, _ptOffset.Y + pt.Y, data.Stride, _colors[_cells[col, row]]);
+                            PaintHalfCell(ptr, ptOffset.X + pt.X, ptOffset.Y + pt.Y, data.Stride, colors[cells[col, row]]);
+                            PaintHalfCell(ptr, ptOffset.X, ptOffset.Y + pt.Y, data.Stride, colors[cells[col, row]]);
                         }
                     }
             }
-            _bmp.UnlockBits(data);
+            bmp.UnlockBits(data);
         }
 
         private unsafe static void PaintCell( byte* ptr, int x, int y, int stride, Color color)

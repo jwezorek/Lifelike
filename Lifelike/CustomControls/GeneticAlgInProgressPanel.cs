@@ -42,7 +42,7 @@ namespace Lifelike.CustomControls
 
         private void btnSave_Click(object sender, EventArgs e)
         {
-            MainWindow.SaveCurrentRules();
+            MainWindow.DoSaveDialog();
         }
 
         private void btnReturnToPrevGeneration_Click(object sender, EventArgs e)

@@ -11,7 +11,6 @@ namespace Lifelike
     public class CellularAutomataSettings
     {
         private int _numStates;
-        private double _intialAlivePcnt = 0.25;
         private NeighborhoodFunction _funcMapNeighbors;
         private CellStructure _cellStructure;
 
@@ -58,11 +57,6 @@ namespace Lifelike
         {
             get { return _numStates;  }
             set { _numStates = value; }
-        }
-
-        public double InitialAlivePcnt
-        {
-            get { return _intialAlivePcnt; }
         }
 
         public Cells GetInitialCells(DiscreteProbabilityDistribution<int> stateDistribution)
