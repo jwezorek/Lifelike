@@ -171,29 +171,41 @@ namespace Lifelike
                 return;
             
             CellularAutomataRules rules = new CellularAutomataRules(data.StateTable);
-            if (!_genAlg.IsInProgess)
+            try
             {
-                ctrlCellularAutomataSettings.Set(data.CellStructure, rules.NumStates, data.NeighborhoodFunction);
-                ctrlGeneticAlgorithmSettings.SetNumStates(rules.NumStates);
-            }
-            else
-            {
-                if (_genAlg.CaSettings.NeighborhoodFunction.Name != data.NeighborhoodFunction ||
-                        _genAlg.CaSettings.NumStates != rules.NumStates ||
-                        _genAlg.CaSettings.CellStructure.Name != data.CellStructure)
+                if (!_genAlg.IsInProgess)
                 {
-                    MessageBox.Show(
-                        "Neighbor function, cell structure, and/or number states do not match the currently running genetic algorithm settings",
-                        "Error",
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                    );
-                    return;
+                    ctrlCellularAutomataSettings.Set(data.CellStructure, rules.NumStates, data.NeighborhoodFunction);
+                    ctrlGeneticAlgorithmSettings.SetNumStates(rules.NumStates);
                 }
-                _genAlg.CurrentRules = rules;
+                else
+                {
+                    if (_genAlg.CaSettings.NeighborhoodFunction.Name != data.NeighborhoodFunction ||
+                            _genAlg.CaSettings.NumStates != rules.NumStates ||
+                            _genAlg.CaSettings.CellStructure.Name != data.CellStructure)
+                    {
+                        MessageBox.Show(
+                            "Neighbor function, cell structure, and/or number states do not match the currently running genetic algorithm settings",
+                            "Error",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error
+                        );
+                        return;
+                    }
+                    _genAlg.CurrentRules = rules;
+                }
+                Cells cells = _genAlg.CaSettings.GetInitialCells(_genAlg.GaSettings.InitialStateDistribution);
+                ctrlCellularAutomata.Run(cells, rules);
             }
-            Cells cells = _genAlg.CaSettings.GetInitialCells(_genAlg.GaSettings.InitialStateDistribution);
-            ctrlCellularAutomata.Run(cells, rules);
+            catch (Exception e)
+            {
+                MessageBox.Show(
+                    "Invalid CA rules file.",
+                    "Error",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+            }
         }
 
         private void btnLoad_Click(object sender, EventArgs e)
