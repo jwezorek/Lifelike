@@ -59,6 +59,12 @@
     <Compile Include="DistributionBox.Designer.cs">
       <DependentUpon>DistributionBox.cs</DependentUpon>
     </Compile>
+    <Compile Include="ProgressBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ProgressBox.Designer.cs">
+      <DependentUpon>ProgressBox.cs</DependentUpon>
+    </Compile>
     <Compile Include="GifEncoder.cs" />
     <Compile Include="MutationFunction.cs" />
     <Compile Include="NeighborhoodFunction.cs" />
@@ -112,6 +118,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="DistributionBox.resx">
       <DependentUpon>DistributionBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ProgressBox.resx">
+      <DependentUpon>ProgressBox.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="LifelikeWindow.resx">
       <DependentUpon>LifelikeWindow.cs</DependentUpon>

@@ -7,6 +7,7 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -227,20 +228,22 @@ namespace Lifelike
             }
         }
 
-        private void ExportAsAnimatedGif(string outputFilePath)
+        private void ExportAsAnimatedGifWorker(string outputFilePath, ProgressBox box, 
+            int numFramesPreamble, int numFrames)
         {
-            //TODO: popup dialog to get numFramesPreamble and numFrames from user, and
-            // maybe delay setting. Wrap actual generation in a progress dialog
-            // because NGif is pretty slow.
-
             Cells cells = _genAlg.CaSettings.GetInitialCells(_genAlg.GaSettings.InitialStateDistribution);
             CellularAutomataRules rules = ctrlCellularAutomata.Rules;
             NeighborhoodFunction function = _genAlg.CaSettings.NeighborhoodFunction;
 
-            int numFramesPreamble = 100;
-            int numFrames = 200;
             for (int i = 0; i < numFramesPreamble; i++)
+            {
                 cells = cells.ApplyRules(rules, function);
+                box.Invoke(
+                    new Action( 
+                        ()=>box.Increment()
+                    ) 
+                );
+            }
 
             using (FileStream fs = new FileStream(outputFilePath, FileMode.Create))
             using (GifEncoder encoder = new GifEncoder(fs, cells.Columns * 2, cells.Rows * 2))
@@ -252,8 +255,33 @@ namespace Lifelike
                     CellularAutomataControl.PaintBitmap(bmp, cells, offset, ctrlCellularAutomata.Colors);
                     encoder.AddFrame(Image.FromHbitmap(bmp.GetHbitmap()), 0, 0, new TimeSpan(5));
                     cells = cells.ApplyRules(rules, function);
+
+                    box.Increment();
                 }
             }
+
+            box.Finish();
+        }
+
+        private void ExportAsAnimatedGif(string outputFilePath)
+        {
+            int numFramesPreamble = 100;
+            int numFrames = 200;
+
+            var dlg = new ProgressBox();
+            dlg.LabelText = "Generating animated GIF...";
+            dlg.ProgressRange = numFramesPreamble + numFrames;
+            dlg.StartPosition = FormStartPosition.CenterParent;
+            Thread thread = new Thread(
+                new ThreadStart(  
+                    () => {
+                        ExportAsAnimatedGifWorker(outputFilePath, dlg, 
+                            numFramesPreamble, numFrames);
+                    }
+                )
+            );
+            thread.Start();
+            DialogResult dr = dlg.ShowDialog(this);
         }
 
         private void SaveRules(string fileName)
