@@ -45,11 +45,19 @@ namespace Lifelike
             }
         }
 
-        public int GridSize
+        public int NumColumns
         {
             get
             {
-                return 280;
+                return _cellStructure.Columns;
+            }
+        }
+
+        public int NumRows
+        {
+            get
+            {
+                return _cellStructure.Rows; 
             }
         }
 
@@ -61,7 +69,7 @@ namespace Lifelike
 
         public Cells GetInitialCells(DiscreteProbabilityDistribution<int> stateDistribution)
         {
-            return new Cells(CellStructure, GridSize, GridSize, stateDistribution);
+            return new Cells(CellStructure, stateDistribution);
         }
 
         public int NeighborsCount

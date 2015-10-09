@@ -14,7 +14,8 @@ namespace Lifelike
             new HexSixCell(),
             new HexTwelveCell(),
             new SquareFourCell(),
-            new SquareEightCell()
+            new SquareEightCell(),
+            new TriangularThreeCell()
         };
 
         public static CellStructure Get(int index)
@@ -42,6 +43,22 @@ namespace Lifelike
         public string Name
         {
             get { return _name;  }
+        }
+
+        public virtual int Rows
+        {
+            get 
+            { 
+                return 280; 
+            }
+        }
+
+        public virtual int Columns
+        {
+            get
+            {
+                return 280;
+            }
         }
 
         public abstract Point GetXyCoordinates(Cells cells, int col, int row, int scale);
@@ -253,6 +270,57 @@ namespace Lifelike
             get
             {
                 return 8;
+            }
+        }
+    }
+
+    class TriangularThreeCell : CellStructure
+    {
+        public TriangularThreeCell()
+            : base("Triangular, 3-cell")
+        { }
+
+        public override Point GetXyCoordinates(Cells cells, int col, int row, int scale)
+        {
+            int halfScale = scale / 2;
+            return new Point(col*halfScale + 280, row*scale);
+        }
+
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        {
+            int halfScale = scale / 2;
+            return new IndexPair((x-280) / halfScale, y / scale);
+        }
+
+        public override IEnumerable<int> Neighbors(Cells cells, int col, int row)
+        {
+            if (col + row % 2 == 0)
+            {
+                yield return cells[col, cells.WrapRow(row - 1)];
+                yield return cells[cells.WrapColumn(col - 1), row];
+                yield return cells[cells.WrapColumn(col + 1), row];
+            }
+            else
+            {
+                yield return cells[cells.WrapColumn(col - 1), row];
+                yield return cells[cells.WrapColumn(col + 1), row]; 
+                yield return cells[col, cells.WrapRow(row + 1)];
+            }
+        }
+
+        public override int NeighborsCount
+        {
+            get
+            {
+                return 3;
+            }
+        }
+
+        public override int Columns
+        {
+            get
+            {
+                return 2 * base.Columns;
             }
         }
     }

@@ -15,18 +15,13 @@ namespace Lifelike
         public Cells(CellStructure cellStruct)
         {
             _cellStruct = cellStruct;
+            _ary = new int[cellStruct.Columns, cellStruct.Rows];
         }
 
-        public Cells(CellStructure cellStruct, int cols, int rows)
+        public Cells(CellStructure cellStruct, DiscreteProbabilityDistribution<int> stateDistribution)
         {
             _cellStruct = cellStruct;
-            _ary = new int[cols, rows];
-        }
-
-        public Cells(CellStructure cellStruct, int cols, int rows, DiscreteProbabilityDistribution<int> stateDistribution)
-        {
-            _cellStruct = cellStruct;
-            _ary = Util.GetRandomInt2dArray(cols, rows, stateDistribution);
+            _ary = Util.GetRandomInt2dArray(cellStruct.Columns, cellStruct.Rows, stateDistribution);
         }
 
         public Point GetXyCoordinates(int col, int row, int scale)
