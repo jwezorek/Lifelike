@@ -45,6 +45,7 @@ namespace Lifelike
         }
 
         public abstract Point GetXyCoordinates(Cells cells, int col, int row, int scale);
+        public abstract IndexPair GetColRowFromXy(Cells cells, int col, int row, int scale);
         public abstract IEnumerable<int> Neighbors(Cells cells, int col, int row);
         public abstract int NeighborsCount
         {
@@ -63,6 +64,24 @@ namespace Lifelike
             int x = (col * scale + row * halfScale) % (cells.Columns * scale);
             int y = row * scale;
             return new Point(x, y);
+        }
+
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        {
+            int row = y / scale;
+            int col = (x - y / 2) / scale;
+
+            if (col < 0)
+                col += cells.Columns;
+            else if (col >= cells.Columns)
+                col -= cells.Columns;
+
+            if (row < 0)
+                row += cells.Rows;
+            else if (row >= cells.Rows)
+                row -= cells.Rows;
+
+            return new IndexPair(col, row);
         }
 
         public override IEnumerable<int> Neighbors(Cells cells, int col, int row)
@@ -95,7 +114,26 @@ namespace Lifelike
             int halfScale = scale / 2;
             int x = (col * scale + row * halfScale) % (cells.Columns * scale);
             int y = row * scale;
+
             return new Point(x, y);
+        }
+
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        {
+            int row = y / scale;
+            int col = (x - y / 2) / scale;
+
+            if (col < 0)
+                col += cells.Columns;
+            else if (col >= cells.Columns)
+                col -= cells.Columns;
+
+            if (row < 0)
+                row += cells.Rows;
+            else if (row >= cells.Rows)
+                row -= cells.Rows;
+
+            return new IndexPair(col, row);
         }
 
         public override IEnumerable<int> Neighbors(Cells cells, int col, int row)
@@ -134,6 +172,24 @@ namespace Lifelike
             return new Point(scale*col, scale*row);
         }
 
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        {
+            int row = y / scale;
+            int col = x / scale;
+
+            if (col < 0)
+                col += cells.Columns;
+            else if (col >= cells.Columns)
+                col -= cells.Columns;
+
+            if (row < 0)
+                row += cells.Rows;
+            else if (row >= cells.Rows)
+                row -= cells.Rows;
+
+            return new IndexPair(col, row);
+        }
+
         public override IEnumerable<int> Neighbors(Cells cells, int col, int row)
         {
             yield return cells[col, cells.WrapRow(row - 1)];
@@ -160,6 +216,24 @@ namespace Lifelike
         public override Point GetXyCoordinates(Cells cells, int col, int row, int scale)
         {
             return new Point(scale * col, scale * row);
+        }
+
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        {
+            int row = y / scale;
+            int col = y / scale;
+
+            if (col < 0)
+                col += cells.Columns;
+            else if (col >= cells.Columns)
+                col -= cells.Columns;
+
+            if (row < 0)
+                row += cells.Rows;
+            else if (row >= cells.Rows)
+                row -= cells.Rows;
+
+            return new IndexPair(col, row);
         }
 
         public override IEnumerable<int> Neighbors(Cells cells, int col, int row)

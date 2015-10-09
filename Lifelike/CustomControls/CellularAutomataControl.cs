@@ -18,6 +18,7 @@ namespace Lifelike
         private Bitmap _bmp;
         private CellularAutomataRules _rules;
         private Timer _timer;
+        private const int NUM_PER_SPRINKLE = 25;
 
         private const int CELL_DIM = 2;
         private List<Color> _colors = new List<Color> {
@@ -51,6 +52,53 @@ namespace Lifelike
             _timer = new Timer();
             _timer.Interval = 1;
             _timer.Tick += DoCellularAutomata;
+        }
+
+        bool IsDragging
+        {
+            get
+            {
+                return this.Capture;
+            }
+        }
+
+        override protected void OnMouseDown(MouseEventArgs e)
+        {
+ 	         base.OnMouseDown(e);
+             this.Capture = true;
+        }
+
+        override protected void OnMouseMove(MouseEventArgs e)
+        {
+ 	         base.OnMouseDown(e);
+             if (IsDragging)
+                SprinkleLife(e.X, e.Y);
+        }
+
+        private void SprinkleLife(int x, int y)
+        {
+            if (_cells == null)
+                return;
+
+            x -= _ptOffset.X;
+            y -= _ptOffset.Y;
+
+            for (int i = 0; i < NUM_PER_SPRINKLE; i++)
+            {
+                double angle = 2.0 * Math.PI * Util.RndUniformReal;
+                double radius = Util.RndNormalReal( 10.0, 3.0 );
+                int xx = (int)(Math.Round(x + radius * Math.Cos(angle)));
+                int yy = (int)(Math.Round(y + radius * Math.Sin(angle)));
+
+                IndexPair colRow = _cells.GetColRowFromXy(xx , yy, CELL_DIM);
+                _cells[colRow] = Util.RndUniformInt( _rules.NumStates );
+            }
+        }
+
+        override protected void OnMouseUp(MouseEventArgs e)
+        {
+            base.OnMouseDown(e);
+            this.Capture = false;
         }
 
         protected void OnChanged()

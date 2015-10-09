@@ -197,7 +197,7 @@ namespace Lifelike
                 Cells cells = _genAlg.CaSettings.GetInitialCells(_genAlg.GaSettings.InitialStateDistribution);
                 ctrlCellularAutomata.Run(cells, rules);
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show(
                     "Invalid CA rules file.",

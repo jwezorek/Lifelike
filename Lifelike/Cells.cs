@@ -34,6 +34,11 @@ namespace Lifelike
             return _cellStruct.GetXyCoordinates(this, col, row, scale);
         }
 
+        public IndexPair GetColRowFromXy(int x, int y, int scale)
+        {
+            return _cellStruct.GetColRowFromXy(this, x, y, scale);
+        }
+
         public int Columns
         {
             get
