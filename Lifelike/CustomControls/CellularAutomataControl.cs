@@ -255,5 +255,10 @@ namespace Lifelike
             Stop();
             Rules = null;
         }
+
+        internal void Resume()
+        {
+            _timer.Start();
+        }
     }
 }

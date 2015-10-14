@@ -96,7 +96,7 @@ namespace Lifelike
             this.btnSkip.Location = new System.Drawing.Point(1, 651);
             this.btnSkip.Margin = new System.Windows.Forms.Padding(4);
             this.btnSkip.Name = "btnSkip";
-            this.btnSkip.Size = new System.Drawing.Size(47, 28);
+            this.btnSkip.Size = new System.Drawing.Size(63, 28);
             this.btnSkip.TabIndex = 10;
             this.btnSkip.Text = "Skip";
             this.btnSkip.UseVisualStyleBackColor = true;
@@ -116,10 +116,10 @@ namespace Lifelike
             // btnRerun
             // 
             this.btnRerun.Enabled = false;
-            this.btnRerun.Location = new System.Drawing.Point(594, 652);
+            this.btnRerun.Location = new System.Drawing.Point(578, 652);
             this.btnRerun.Margin = new System.Windows.Forms.Padding(2);
             this.btnRerun.Name = "btnRerun";
-            this.btnRerun.Size = new System.Drawing.Size(51, 25);
+            this.btnRerun.Size = new System.Drawing.Size(67, 25);
             this.btnRerun.TabIndex = 12;
             this.btnRerun.Text = "Rerun";
             this.btnRerun.UseVisualStyleBackColor = true;

@@ -277,6 +277,8 @@ namespace Lifelike
 
         private void ExportAsAnimatedGif(string outputFilePath)
         {
+            ctrlCellularAutomata.Stop();
+
             int numFramesPreamble = 100;
             int numFrames = 200;
 
@@ -294,6 +296,8 @@ namespace Lifelike
             );
             thread.Start();
             DialogResult dr = dlg.ShowDialog(this);
+
+            ctrlCellularAutomata.Resume();
         }
 
         private void SaveRules(string fileName)
