@@ -15,7 +15,9 @@ namespace Lifelike
             new NoMutation(),
             new RandomUnconstrainedChanges(),
             new DuplicateRows(),
-            new DuplicateColumns()
+            new DuplicateColumns(),
+            new Unzero(),
+            new Zero()
         };
 
         public static IEnumerable<MutationFunction> All
@@ -110,6 +112,58 @@ namespace Lifelike
 
                 for (int column = 0; column < ca.Range; column++)
                     mutant[column, rowDest] = mutant[column, rowSrc];
+            }
+            return mutant;
+        }
+    }
+
+    public class Unzero : MutationFunction
+    {
+        public Unzero()
+            : base("Unzero a few state table states")
+        {
+        }
+
+        public override CellularAutomataRules Mutate(CellularAutomataRules ca, GeneticAlgorithmSettings settings)
+        {
+            var mutant = new CellularAutomataRules(ca);
+            int n = Util.RndUniformInt((int)(10.0 * settings.MutationTemperature)) + 1;
+            for (int i = 0; i < n; i++)
+            {
+                int row, col;
+                int count = 0;
+                do
+                {
+                    row = Util.RndUniformInt(ca.NumStates);
+                    col = Util.RndUniformInt(ca.Range);
+                } while (mutant[col, row] != 0 && count++ < 20);
+                mutant[col, row] = Util.RndUniformInt(ca.NumStates - 1) + 1;
+            }
+            return mutant;
+        }
+    }
+
+    public class Zero : MutationFunction
+    {
+        public Zero()
+            : base("Zero out a few state table states")
+        {
+        }
+
+        public override CellularAutomataRules Mutate(CellularAutomataRules ca, GeneticAlgorithmSettings settings)
+        {
+            var mutant = new CellularAutomataRules(ca);
+            int n = Util.RndUniformInt((int)(10.0 * settings.MutationTemperature)) + 1;
+            for (int i = 0; i < n; i++)
+            {
+                int row, col;
+                int count = 0;
+                do
+                {
+                    row = Util.RndUniformInt(ca.NumStates);
+                    col = Util.RndUniformInt(ca.Range);
+                } while (mutant[col, row] == 0 && count++ < 20);
+                mutant[col, row] = 0;
             }
             return mutant;
         }
