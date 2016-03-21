@@ -265,7 +265,7 @@ namespace Lifelike
                 for (int i = 0; i < numFrames; i++)
                 {
                     CellularAutomataControl.PaintBitmap(bmp, cells, offset, ctrlCellularAutomata.Colors);
-                    encoder.AddFrame(Image.FromHbitmap(bmp.GetHbitmap()), 0, 0, new TimeSpan(5));
+                    encoder.AddFrame(Image.FromHbitmap(bmp.GetHbitmap()), 0, 0, new TimeSpan(0));
                     cells = cells.ApplyRules(rules, function);
 
                     box.Increment();
@@ -280,7 +280,7 @@ namespace Lifelike
             ctrlCellularAutomata.Stop();
 
             int numFramesPreamble = 100;
-            int numFrames = 200;
+            int numFrames = 800;
 
             var dlg = new ProgressBox();
             dlg.LabelText = "Generating animated GIF...";

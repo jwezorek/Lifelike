@@ -154,6 +154,7 @@
     <None Include="Rules\Flies.json" />
     <None Include="Rules\InkBlots.json" />
     <None Include="Rules\JoeLife.json" />
+    <None Include="Rules\JoeLife2.json" />
     <None Include="Rules\Madman.json" />
     <None Include="Rules\MagicCarpets.json" />
     <None Include="Rules\sparklers.json" />
