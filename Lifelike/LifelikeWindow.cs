@@ -194,6 +194,12 @@ namespace Lifelike
                     }
                     _genAlg.CurrentRules = rules;
                 }
+
+                if (data.CustomColors != null)
+                    Colors = data.CustomColors.Select(
+                        ary => Color.FromArgb(ary[0], ary[1], ary[2])
+                    ).ToList();
+                
                 Cells cells = _genAlg.CaSettings.GetInitialCells(_genAlg.GaSettings.InitialStateDistribution);
                 ctrlCellularAutomata.Run(cells, rules);
             }

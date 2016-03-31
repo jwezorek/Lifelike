@@ -28,6 +28,12 @@ namespace Lifelike
             get;
         }
 
+        public int[][] CustomColors
+        {
+            get;
+            set;
+        }
+
         public RulesSaveData()
         {
         }

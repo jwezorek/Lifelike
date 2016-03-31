@@ -1,1 +1,18 @@
-{"CellStructure":"Hex, 6-cell","NeighborhoodFunction":"Alive cell count","StateTable":[[4,0,0,3,1],[4,1,3,3,0],[4,1,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,3,0,0,3],[3,3,0,0,0]]}
+{
+  "CellStructure": "Hex, 6-cell",
+  "NeighborhoodFunction": "Alive cell count",
+  "StateTable": [
+    [ 2, 1, 1 ],
+    [ 2, 1, 0 ],
+    [ 2, 0, 0 ],
+    [ 0, 0, 0 ],
+    [ 0, 0, 0 ],
+    [ 0, 0, 1 ],
+    [ 1, 0, 0 ]
+  ],
+  "CustomColors": [
+    [ 0, 0, 255],
+    [ 255, 0, 0],
+    [ 0, 0, 225]
+  ]
+}
