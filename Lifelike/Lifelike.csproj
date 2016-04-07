@@ -149,7 +149,6 @@
     </Compile>
     <None Include="Rules\Armada.json" />
     <None Include="Rules\ConwayLife.json" />
-    <None Include="Rules\dragon2s.json" />
     <None Include="Rules\dragons.json" />
     <None Include="Rules\Flies.json" />
     <None Include="Rules\InkBlots.json" />
