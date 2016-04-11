@@ -24,14 +24,14 @@ namespace Lifelike
             _ary = Util.GetRandomInt2dArray(cellStruct.Columns, cellStruct.Rows, stateDistribution);
         }
 
-        public Point GetXyCoordinates(int col, int row, int scale)
+        public Point GetXyCoordinates(int col, int row)
         {
-            return _cellStruct.GetXyCoordinates(this, col, row, scale);
+            return _cellStruct.GetXyCoordinates(this, col, row);
         }
 
-        public IndexPair GetColRowFromXy(int x, int y, int scale)
+        public IndexPair GetColRowFromXy(int x, int y)
         {
-            return _cellStruct.GetColRowFromXy(this, x, y, scale);
+            return _cellStruct.GetColRowFromXy(this, x, y);
         }
 
         public int Columns

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lifelike.CustomControls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -252,6 +253,7 @@ namespace Lifelike
             Cells cells = _genAlg.CaSettings.GetInitialCells(_genAlg.GaSettings.InitialStateDistribution);
             CellularAutomataRules rules = ctrlCellularAutomata.Rules;
             NeighborhoodFunction function = _genAlg.CaSettings.NeighborhoodFunction;
+            CellPainter painter = _genAlg.CaSettings.CellStructure.Painter;
 
             for (int i = 0; i < numFramesPreamble; i++)
             {
@@ -270,7 +272,7 @@ namespace Lifelike
                 Point offset = new Point(0, 0);
                 for (int i = 0; i < numFrames; i++)
                 {
-                    CellularAutomataControl.PaintBitmap(bmp, cells, offset, ctrlCellularAutomata.Colors);
+                    painter.PaintBitmap(bmp, cells, offset, ctrlCellularAutomata.Colors);
                     encoder.AddFrame(Image.FromHbitmap(bmp.GetHbitmap()), 0, 0, new TimeSpan(0));
                     cells = cells.ApplyRules(rules, function);
 

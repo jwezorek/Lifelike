@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lifelike.CustomControls;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,10 +18,10 @@ namespace Lifelike
         private Point _ptOffset;
         private Bitmap _bmp;
         private CellularAutomataRules _rules;
+        private CellularAutomataSettings _settings;
         private Timer _timer;
         private const int NUM_PER_SPRINKLE = 25;
-
-        private const int CELL_DIM = 2;
+        
         private List<Color> _colors = new List<Color> {
             Color.Black,
             Color.Red,
@@ -90,7 +91,7 @@ namespace Lifelike
                 int xx = (int)(Math.Round(x + radius * Math.Cos(angle)));
                 int yy = (int)(Math.Round(y + radius * Math.Sin(angle)));
 
-                IndexPair colRow = _cells.GetColRowFromXy(xx , yy, CELL_DIM);
+                IndexPair colRow = _cells.GetColRowFromXy(xx , yy);
                 _cells[colRow] = Util.RndUniformInt( _rules.NumStates );
             }
         }
@@ -123,15 +124,21 @@ namespace Lifelike
 
         private void DoCellularAutomata(object sender, EventArgs e)
         {
-            _cells = _cells.ApplyRules(_rules, CellularAutomataSettings.NeighborhoodFunction );
-            PaintBitmap(_bmp, _cells, _ptOffset, _colors);
+            _cells = _cells.ApplyRules(_rules, _settings.NeighborhoodFunction );
+            _settings.CellStructure.Painter.PaintBitmap(_bmp, _cells, _ptOffset, _colors);
             Invalidate();
         }
 
         public CellularAutomataSettings CellularAutomataSettings
         {
-            get;
-            set;
+            get
+            {
+                return _settings;
+            }
+            set
+            {
+                _settings = value;
+            }
         }
 
         protected override void OnPaint(PaintEventArgs pe)
@@ -154,55 +161,13 @@ namespace Lifelike
             }
         }
 
-        public static void PaintBitmap(Bitmap bmp, Cells cells, Point ptOffset, List<Color> colors)
+        private Point CalculateOffset()
         {
-            BitmapData data = bmp.LockBits(new Rectangle(0, 0, bmp.Width, bmp.Height), ImageLockMode.ReadWrite, PixelFormat.Format24bppRgb);
-            unsafe
-            {
-                byte* ptr = (byte*)data.Scan0;
-                for (int row = 0; row < cells.Rows; row++)
-                    for (int col = 0; col < cells.Columns; col++)
-                    {
-                        var pt = cells.GetXyCoordinates(col, row, CELL_DIM);
-                        if (pt.X + CELL_DIM < cells.Columns * CELL_DIM)
-                            PaintCell(ptr, ptOffset.X + pt.X, ptOffset.Y + pt.Y, data.Stride, colors[cells[col, row]]);
-                        else
-                        {
-                            PaintHalfCell(ptr, ptOffset.X + pt.X, ptOffset.Y + pt.Y, data.Stride, colors[cells[col, row]]);
-                            PaintHalfCell(ptr, ptOffset.X, ptOffset.Y + pt.Y, data.Stride, colors[cells[col, row]]);
-                        }
-                    }
-            }
-            bmp.UnlockBits(data);
-        }
-
-        private unsafe static void PaintCell( byte* ptr, int x, int y, int stride, Color color)
-        {
-            int x2 = x + 1;
-            int y2 = y + 1;
-            ptr[(x * 3) + y * stride] = color.B;
-            ptr[(x * 3) + y * stride + 1] = color.G;
-            ptr[(x * 3) + y * stride + 2] = color.R;
-            ptr[(x2 * 3) + y * stride] = color.B;
-            ptr[(x2 * 3) + y * stride + 1] = color.G;
-            ptr[(x2 * 3) + y * stride + 2] = color.R;
-            ptr[(x * 3) + y2 * stride] = color.B;
-            ptr[(x * 3) + y2 * stride + 1] = color.G;
-            ptr[(x * 3) + y2 * stride + 2] = color.R;
-            ptr[(x2 * 3) + y2 * stride] = color.B;
-            ptr[(x2 * 3) + y2 * stride + 1] = color.G;
-            ptr[(x2 * 3) + y2 * stride + 2] = color.R;
-        }
-
-        private unsafe static void PaintHalfCell(byte* ptr, int x, int y, int stride, Color color)
-        {
-            int y2 = y + 1;
-            ptr[(x * 3) + y * stride] = color.B;
-            ptr[(x * 3) + y * stride + 1] = color.G;
-            ptr[(x * 3) + y * stride + 2] = color.R;
-            ptr[(x * 3) + y2 * stride] = color.B;
-            ptr[(x * 3) + y2 * stride + 1] = color.G;
-            ptr[(x * 3) + y2 * stride + 2] = color.R;
+            Size szWnd = ClientSize;
+            Size szCells = _settings.CellStructure.Dimensions;
+            int x = (szWnd.Width - szCells.Width) / 2;
+            int y = (szWnd.Height - szCells.Height) / 2;
+            return new Point(x, y);
         }
 
         private static Bitmap CreateOffscreenBitmap(Size sz)
@@ -211,16 +176,6 @@ namespace Lifelike
             using (Graphics g = Graphics.FromImage(bmp))
                 g.Clear(Color.Black);
             return bmp;
-        }
-
-        private void CalculateOffset()
-        {
-            Size sz = ClientSize;
-            int wdCells = _cells.Columns * CELL_DIM;
-            int hgtCells = _cells.Rows * CELL_DIM;
-            int x = (sz.Width - wdCells) / 2;
-            int y = (sz.Height - hgtCells) / 2;
-            _ptOffset = new Point(x, y);
         }
 
         public CellularAutomataRules Rules
@@ -240,7 +195,7 @@ namespace Lifelike
         public void Run(Cells cells, CellularAutomataRules rules)
         {
             _cells = cells;
-            CalculateOffset();
+            _ptOffset = CalculateOffset();
             Rules = (rules != null) ? rules : _rules;
             _timer.Start();
         }

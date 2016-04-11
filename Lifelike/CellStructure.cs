@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lifelike.CustomControls;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -9,6 +10,7 @@ namespace Lifelike
 {
     public abstract class CellStructure
     {
+        protected CellPainter _painter;
         private static List<CellStructure> _registry = new List<CellStructure>
         {
             new HexSixCell(),
@@ -45,11 +47,19 @@ namespace Lifelike
             get { return _name;  }
         }
 
+        public virtual Size Dimensions
+        {
+            get
+            {
+                return new Size(Columns * 2, Rows * 2);
+            }
+        }
+
         public virtual int Rows
         {
             get 
             { 
-                return 280; 
+                return 310; 
             }
         }
 
@@ -57,13 +67,22 @@ namespace Lifelike
         {
             get
             {
-                return 280;
+                return 310;
             }
         }
 
-        public abstract Point GetXyCoordinates(Cells cells, int col, int row, int scale);
-        public abstract IndexPair GetColRowFromXy(Cells cells, int col, int row, int scale);
+        public virtual CellPainter Painter
+        {
+            get
+            {
+                return new SquareCellPainter();
+            }
+        }
+
+        public abstract Point GetXyCoordinates(Cells cells, int col, int row);
+        public abstract IndexPair GetColRowFromXy(Cells cells, int col, int row);
         public abstract IEnumerable<int> Neighbors(Cells cells, int col, int row);
+
         public abstract int NeighborsCount
         {
             get;
@@ -75,18 +94,18 @@ namespace Lifelike
         public HexSixCell() : base( "Hex, 6-cell" )
         { }
 
-        public override Point GetXyCoordinates(Cells cells, int col, int row, int scale)
+        public override Point GetXyCoordinates(Cells cells, int col, int row)
         {
-            int halfScale = scale / 2;
-            int x = (col * scale + row * halfScale) % (cells.Columns * scale);
-            int y = row * scale;
+
+            int x = (col * 2 + row) % (cells.Columns * 2);
+            int y = row * 2;
             return new Point(x, y);
         }
 
-        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y)
         {
-            int row = y / scale;
-            int col = (x - y / 2) / scale;
+            int row = y / 2;
+            int col = (x - y / 2) / 2;
 
             if (col < 0)
                 col += cells.Columns;
@@ -126,19 +145,18 @@ namespace Lifelike
             : base("Hex, 12-cell")
         { }
 
-        public override Point GetXyCoordinates(Cells cells, int col, int row, int scale)
+        public override Point GetXyCoordinates(Cells cells, int col, int row)
         {
-            int halfScale = scale / 2;
-            int x = (col * scale + row * halfScale) % (cells.Columns * scale);
-            int y = row * scale;
+            int x = (col * 2 + row ) % (cells.Columns * 2);
+            int y = row * 2;
 
             return new Point(x, y);
         }
 
-        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y)
         {
-            int row = y / scale;
-            int col = (x - y / 2) / scale;
+            int row = y / 2;
+            int col = (x - y / 2) / 2;
 
             if (col < 0)
                 col += cells.Columns;
@@ -184,15 +202,15 @@ namespace Lifelike
             : base("Square, 4-cell")
         { }
 
-        public override Point GetXyCoordinates(Cells cells, int col, int row, int scale)
+        public override Point GetXyCoordinates(Cells cells, int col, int row)
         {
-            return new Point(scale*col, scale*row);
+            return new Point(2*col, 2*row);
         }
 
-        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y)
         {
-            int row = y / scale;
-            int col = x / scale;
+            int row = y / 2;
+            int col = x / 2;
 
             if (col < 0)
                 col += cells.Columns;
@@ -230,15 +248,15 @@ namespace Lifelike
             : base("Square, 8-cell")
         { }
 
-        public override Point GetXyCoordinates(Cells cells, int col, int row, int scale)
+        public override Point GetXyCoordinates(Cells cells, int col, int row)
         {
-            return new Point(scale * col, scale * row);
+            return new Point(2 * col, 2 * row);
         }
 
-        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y)
         {
-            int row = y / scale;
-            int col = y / scale;
+            int row = y / 2;
+            int col = y / 2;
 
             if (col < 0)
                 col += cells.Columns;
@@ -280,31 +298,32 @@ namespace Lifelike
             : base("Triangular, 3-cell")
         { }
 
-        public override Point GetXyCoordinates(Cells cells, int col, int row, int scale)
+        public override Point GetXyCoordinates(Cells cells, int col, int row)
         {
-            int halfScale = scale / 2;
-            return new Point(col*halfScale + 280, row*scale);
+            int x = col * TriangleCellPainter.HALF_WD_CEIL - TriangleCellPainter.HALF_WD;
+            int y = row * TriangleCellPainter.CELL_HGT;
+            return new Point(x, y);
         }
 
-        public override IndexPair GetColRowFromXy(Cells cells, int x, int y, int scale)
+        public override IndexPair GetColRowFromXy(Cells cells, int x, int y)
         {
-            int halfScale = scale / 2;
-            return new IndexPair((x-280) / halfScale, y / scale);
+            throw new Exception("TODO: GetColRowFromXy  Triangular");
         }
 
         public override IEnumerable<int> Neighbors(Cells cells, int col, int row)
         {
-            if (col + row % 2 == 0)
+            bool isRightSideUp = (col + row) % 2 == 0;
+            if (isRightSideUp)
             {
-                yield return cells[col, cells.WrapRow(row - 1)];
                 yield return cells[cells.WrapColumn(col - 1), row];
                 yield return cells[cells.WrapColumn(col + 1), row];
+                yield return cells[col, cells.WrapRow(row+1)];
             }
             else
             {
                 yield return cells[cells.WrapColumn(col - 1), row];
-                yield return cells[cells.WrapColumn(col + 1), row]; 
-                yield return cells[col, cells.WrapRow(row + 1)];
+                yield return cells[cells.WrapColumn(col + 1), row];
+                yield return cells[col, cells.WrapRow(row - 1)];
             }
         }
 
@@ -316,11 +335,37 @@ namespace Lifelike
             }
         }
 
+        public override int Rows
+        {
+            get
+            {
+                //TODO: generate this programatically
+                return 158;
+            }
+        }
+
         public override int Columns
         {
             get
             {
-                return 2 * base.Columns;
+                //TODO: generate this programatically
+                return 212;
+            }
+        }
+
+        public override Size Dimensions
+        {
+            get
+            {
+                return new Size(Columns * 3, Rows * 4);
+            }
+        }
+
+        public override CellPainter Painter
+        {
+            get
+            {
+                return new TriangleCellPainter();
             }
         }
     }

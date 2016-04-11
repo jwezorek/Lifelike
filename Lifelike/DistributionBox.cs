@@ -19,7 +19,6 @@ namespace Lifelike
         private ColorSlider _extraSlider;
         private Label _extraSliderLabel;
         private List<Label> _labels;
-        private int _currentBalancingSlider = 0;
 
         private const int MARG = 10;
         private const int BTN_HGT = 35;

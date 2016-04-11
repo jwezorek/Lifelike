@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CellStructure.cs" />
+    <Compile Include="CustomControls\CellPainter.cs" />
     <Compile Include="DiscreteDistribution.cs" />
     <Compile Include="DistributionBox.cs">
       <SubType>Form</SubType>
