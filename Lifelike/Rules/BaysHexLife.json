@@ -1,5 +1,4 @@
 ﻿{
-  
   "CellStructure": "Hex, 6-cell",
   "NeighborhoodFunction": "Alive cell count",
   "StateTable": [
