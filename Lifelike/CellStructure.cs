@@ -17,7 +17,8 @@ namespace Lifelike
             new HexTwelveCell(),
             new SquareFourCell(),
             new SquareEightCell(),
-            new TriangularThreeCell()
+            new TriangularThreeCell(),
+            new TriangularTwelveCell()
         };
 
         public static CellStructure Get(int index)
@@ -35,7 +36,7 @@ namespace Lifelike
             get { return _registry.Select(item => item.Name).ToList(); }
         }
 
-        private string _name;
+        protected string _name;
 
         public CellStructure(string name)
         {
@@ -307,7 +308,14 @@ namespace Lifelike
 
         public override IndexPair GetColRowFromXy(Cells cells, int x, int y)
         {
-            throw new Exception("TODO: GetColRowFromXy  Triangular");
+            float fX = x;
+            float fY = y;
+            float fColumn = (fX + (float)TriangleCellPainter.HALF_WD) / (float)TriangleCellPainter.HALF_WD_CEIL;
+            float fRow = fY / (float)TriangleCellPainter.CELL_HGT;
+            return new IndexPair(
+                cells.WrapColumn((int)Math.Round(fColumn)), 
+                cells.WrapRow((int)Math.Round(fRow))
+            );
         }
 
         public override IEnumerable<int> Neighbors(Cells cells, int col, int row)
@@ -366,6 +374,63 @@ namespace Lifelike
             get
             {
                 return new TriangleCellPainter();
+            }
+        }
+    }
+
+    class TriangularTwelveCell : TriangularThreeCell
+    {
+        public TriangularTwelveCell()
+        {
+            _name = "Triangular, 12-cell";
+        }
+
+        public override IEnumerable<int> Neighbors(Cells cells, int col, int row)
+        {
+            bool isRightSideUp = (col + row) % 2 == 0;
+            if (isRightSideUp)
+            {
+                yield return cells[cells.WrapColumn(col - 1), cells.WrapRow(row -1)];
+                yield return cells[cells.WrapColumn(col), cells.WrapRow(row -1)];
+                yield return cells[cells.WrapColumn(col + 1), cells.WrapRow(row - 1)];
+
+                yield return cells[cells.WrapColumn(col - 2), cells.WrapRow(row + 1)];
+                yield return cells[cells.WrapColumn(col - 2), row];
+                yield return cells[cells.WrapColumn(col - 1), row];
+
+                yield return cells[cells.WrapColumn(col - 1), cells.WrapRow(row + 1)];
+                yield return cells[cells.WrapColumn(col), cells.WrapRow(row + 1)];
+                yield return cells[cells.WrapColumn(col + 1), cells.WrapRow(row + 1)];
+
+                yield return cells[cells.WrapColumn(col + 2), cells.WrapRow(row + 1)];
+                yield return cells[cells.WrapColumn(col + 2), row];
+                yield return cells[cells.WrapColumn(col + 1), row];
+            }
+            else
+            {
+                yield return cells[cells.WrapColumn(col - 1), cells.WrapRow(row + 1)];
+                yield return cells[cells.WrapColumn(col), cells.WrapRow(row + 1)];
+                yield return cells[cells.WrapColumn(col + 1), cells.WrapRow(row + 1)];
+
+                yield return cells[cells.WrapColumn(col - 2), cells.WrapRow(row - 1)];
+                yield return cells[cells.WrapColumn(col - 2), row];
+                yield return cells[cells.WrapColumn(col - 1), row];
+
+                yield return cells[cells.WrapColumn(col - 1), cells.WrapRow(row - 1)];
+                yield return cells[cells.WrapColumn(col), cells.WrapRow(row - 1)];
+                yield return cells[cells.WrapColumn(col + 1), cells.WrapRow(row - 1)];
+
+                yield return cells[cells.WrapColumn(col + 2), cells.WrapRow(row - 1)];
+                yield return cells[cells.WrapColumn(col + 2), row];
+                yield return cells[cells.WrapColumn(col + 1), row];
+            }
+        }
+
+        public override int NeighborsCount
+        {
+            get
+            {
+                return 12;
             }
         }
     }
