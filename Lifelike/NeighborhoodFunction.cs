@@ -18,7 +18,8 @@ namespace Lifelike
             new StateBasedBinary(),
             new StateBasedTrinary(),
             new HighState(),
-            new LowNonZeroState()
+            new LowNonZeroState(),
+            new MedianState(),
         };
         
         public static NeighborhoodFunction Get(int index)
@@ -328,6 +329,31 @@ namespace Lifelike
                 if (state > 0 && state < low)
                     low = state;
             return (low != int.MaxValue) ? low : 0;
+        }
+
+        public override int GetRange(int neighborsSize, int states)
+        {
+            return states;
+        }
+    }
+
+    public class MedianState : NeighborhoodFunction
+    {
+        public MedianState()
+            : base("Median state")
+        {
+        }
+
+        public override int Map(IEnumerable<int> neighbors, int states)
+        {
+            List<int> list = neighbors.Where( 
+                state => state > 0
+            ).ToList();
+
+            list.Sort();
+            int output = (list.Count > 0) ? list[list.Count/2] : 0;
+
+            return output;
         }
 
         public override int GetRange(int neighborsSize, int states)
